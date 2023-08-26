@@ -44,6 +44,14 @@ def parse_ingredient(ingredient):
     return None
 
 
+def get_config(key):
+    with open('config', 'r') as config_file:
+        config = config_file.read()
+        for line in config.split('\n'):
+            if line.startswith(key):
+                return line.split(' : ')[1]
+
+
 def gather_ingredients(files):
     ingredients = []
 
@@ -54,8 +62,10 @@ def gather_ingredients(files):
             for ingredient in y['ingredients']:
                 ingredients.append(ingredient['name'])
 
-    if 'OPENAI_API' in os.environ:
-        openai.api_key = os.getenv('OPENAI_API')
+    key = get_config('openai_api')
+
+    if len(key) > 0:
+        openai.api_key = get_config('openai_api')
     else:
         print('API key not found')
         return ingredients
@@ -65,66 +75,70 @@ def gather_ingredients(files):
     for ingredient in ingredients:
         outingredients = outingredients + ingredient + '\n'
 
-    prompt = f'''
-        Ingredients:
-        {outingredients}
+    city = ''
+    city = get_config('city')
 
-        Tasks:
-        1. Merge like-items and convert measurements.
-        2. Recommend substitutes for Colorado Springs, CO availability
-        3. Format as:
-            **CATEGORY**
-            [INGREDIENT]: [QUANTITY]
-    '''
+    prompt = ''
+
+    if len(city) == 0:
+        prompt = f'''
+            Ingredients:
+            {outingredients}
+
+            Tasks:
+            1. Merge like-items and convert measurements.
+            2. Format as:
+                **CATEGORY**
+                [INGREDIENT]: [QUANTITY]
+        '''
+    else:
+        prompt = f'''
+            Ingredients:
+            {outingredients}
+
+            Tasks:
+            1. Merge like-items and convert measurements.
+            2. Recommend substitutes for {city} availability
+                a. Substitutions should take up one line per substitution suggestion
+            3. Format as:
+                **CATEGORY**
+                [INGREDIENT]: [QUANTITY]
+        '''
 
     messages = [
-        {"role": "system", "content": "You are a professional grocery shopper, making the most efficient, time-saving lists in the whole world. Remain brief and highly-efficient."},
+        {"role": "user", "content": "You are a professional grocery shopper, making the most efficient, time-saving lists in the whole world. Remain brief and highly-efficient."},
+        {"role": "user", "content": "Only use these categories: Produce, Canned Goods, Dairy, Meat, Deli, Seafood, Condiments & Spices, Bakery, Grains"},
         {"role": "user", "content": prompt}
     ]
+
+    max_tokens = int(get_config('tokens'))
 
     response = openai.ChatCompletion.create(
             model='gpt-4',
             messages=messages,
             temperature=0.5,
-            max_tokens=500
+            max_tokens=max_tokens
         )
 
     print(response.choices[0].message.content)
 
-    return response.choices[0].messages.content.split('\n')
-#    response = openai.ChatCompletion.create(
-#            model="gpt-3.5-turbo",
-#            messages=[
-#                {"role": "system", "content": "You are a professional chef and full-time grocery shopping pro. Answer all questions professionally, and truthfully. Do not break character."},
-#                {"role": "user", "content": "I will provide you a list of ingredients for my upcoming meals, please condense the list (combine like-ingredients), please convert all measurements into an easily-shoppable measurement ('g' or grams in the US, or equivalent for the food item). Ensure the following format for your output of condensed ingredients: {QUANTITY} - {INGREDIENT}, replacing the all-capital placeholders with their appropriate value. Do you understand?"},
-#                {"role": "assistant", "content": "I understand. I will combine ingredients that share the same name, and convert all measurements into a quote-'easily-shoppable' format for quick and efficient grocery shopping, while maintaining a {qty} - {ingredient} format at all times."},
-#                {"role": "user", "content": f"{outingredients}"}
-#            ])
-#
-#    print(response.choices[0].message.content)
-#
-#    response = openai.ChatCompletion.create(
-#            model="gpt-3.5-turbo",
-#            messages=[
-#                {"role": "system", "content": "You are a professional chef and full-time grocery shopping pro. Answer all questions professionally, and truthfully. Do not break character."},
-#                {"role": "user", "content": "I will provide you a list of ingredients for my upcoming meals, please condense the list (combine like-ingredients), please convert all measurements into an easily-shoppable measurement ('g' or grams in the US, or equivalent for the food item). Ensure the following format for your output of condensed ingredients: {QUANTITY} - {INGREDIENT}, replacing the all-capital placeholders with their appropriate value. Do you understand?"},
-#                {"role": "assistant", "content": "I understand. I will combine ingredients that share the same name, and convert all measurements into a quote-'easily-shoppable' format for quick and efficient grocery shopping, while maintaining a {qty} - {ingredient} format at all times."},
-#                {"role": "user", "content": f"{outingredients}"},
-#                {"role": "assistant", "content": response.choices[0].message.content},
-#                {"role": "user", "content": "Please re-review your message and confirm you've done a good job. All similar ingredients should only take up one line, with their values combined. Have you done that?"}
-#            ])
+    return response.choices[0].message.content.split('\n')
 
+
+# Open the recipe card through 'JustTheRecipe.com'
 def open_card(files):
+    # For each of the files that the user's requested, open in read-only mode, load the JSON, find the 'sourceURL' value, and open in the browser
     for recipe in files:
         with open(recipe, 'r') as file:
             y = json.loads(file.read())
 
+            # TODO: Noticed that, rarely, the 'sourceUrl' isn't formatted, need to create a catch for this
             url = y['sourceUrl']
 
             webbrowser.open(f'https://www.justtherecipe.com/?url={url}')
 
 
-
+# Implementation of Python code for use in a Terminal emulator
 if __name__ == '__main__':
     print('')
     print('Select an option: ')
@@ -133,27 +147,45 @@ if __name__ == '__main__':
     print('3) Open recipe card')
 
     choice = input()
+
+    # Empty array that contains all of our recipes in the ~/Recipes folder
     allrecipes = []
 
+    # Iterate and add to array
     for file in os.listdir(os.path.expanduser('~/Recipes/')):
         if file.endswith('.recipe'):
             allrecipes.append(file)
 
+    # The user wants to go shopping!
+    # Gather all the recipes the user wants from a comma-separated input, and process them with 'gather_ingredients' filter
+    # Also outputs a Markdown file that contains a Markdown checklist with ingredients and measurements
     if int(choice) == 1:
         recipes = []
+
         print('')
+
         for file in allrecipes:
             print(f'{allrecipes.index(file) + 1}) {file}')
+
         print('')
         print('Input comma-separated index of the recipes')
+
+        # Re-retrieve our input
         choice = input()
-        for val in choice.split(','):
-            recipe = allrecipes[int(val) - 1]
+
+        # Separate input to get our comma-separated list
+        for val in choice.strip().split(','):
+            recipe = allrecipes[int(val.strip()) - 1]
             recipes.append(os.path.expanduser(f'~/Recipes/{recipe}'))
+
+        # Get our consolidated ingredients list
         results = gather_ingredients(recipes)
+
+        # Open our 'Shopping.md' file in write-create mode and write our output
         with open(os.path.expanduser(f'~/Recipes/Shopping.md'), 'w+') as file:
             for result in results:
                 file.write(f'- [ ] {result}\n')
+
     elif int(choice) == 2:
         print('')
         for file in allrecipes:
