@@ -83,3 +83,23 @@ For example:
 - [ ] Implementation of 'Send to Printer' method for the basic recipe card (no plans to support images)
 - [ ] Documentation updates to cleanup the code
 - [ ] Additional configuration options
+
+<br>
+<br>
+<br>
+
+# About the Author
+My name is Dustin Conlon, I'm a full-time C# and PowerShell software engineer and UI/UX designer (not implementer) for Canon Business Process Solutions.
+
+I've done a considerable amount of work in the development and programming industry, much of which was for proprietary software or for NDA-contract (hence why my portfolio is relatively empty)
+
+I have also done considerable work in multiple languages, and am always excited to learn new ones. At the moment, I'm designing and integrating solutions in Rust, and am likely going to give Go a shot soon too.
+
+You can see my skill-icons below, for indications on my previous work and the work I feel comfortable and confident in my skills in. If the icon isn't there (like for C++), it doesn't mean I don't have experience, but it means I don't have enough to judge my own character in that field.
+<br>
+<br>
+**Development Related Skills**
+[![My Development Skills](https://skillicons.dev/icons?i=azure,cs,css,bootstrap,dotnet,discord,git,html,py,sqlite,neovim,mysql,powershell)](https://skillicons.dev)
+
+**Non-Development Related Skills**
+[![My Other Skills](https://skillicons.dev/icons?i=ps,blender,pr,unity,unreal,sketchup,visualstudio,wordpress,mastodon,activitypub,misskey)](https://skillicons.dev)
