@@ -1,9 +1,9 @@
 # VoltaicGRiD's Recipe Manager
 [![Version - 0.4.0](https://img.shields.io/badge/Version-0.4.0-2ea44f?style=for-the-badge)](https://) [![Language - Python](https://img.shields.io/badge/Language-Python-yellow?style=for-the-badge)](https://)
 
-1. Usage: [#Usage with Newsboat](https://github.com/VoltaicGRiD/Recipe_Manager/edit/main/Readme.md#usage-with-newsboat)
-2. Configuration: [#Configuration](https://github.com/VoltaicGRiD/Recipe_Manager/edit/main/Readme.md#configuration)
-3. Author: [#About the Author](https://github.com/VoltaicGRiD/Recipe_Manager/edit/main/Readme.md#about-the-author)
+1. [Usage](#usage-with-newsboat)
+2. [Configuration](#configuration)
+3. [Author](#about-the-author)
 
 Intended to be used with Newsboat as a 'run-all' solution to recipe management from RSS feeds, my Recipe Manager (RM) can download a recipe into a JSON file (named '.recipe' in my code for easier visibility).
 
