@@ -1,5 +1,6 @@
 # VoltaicGRiD's Recipe Manager
 Intended to be used with Newsboat as a 'run-all' solution to recipe management from RSS feeds, my Recipe Manager (RM) can download a recipe into a JSON file (named '.recipe' in my code for easier visibility).
+**Keep usage of this tool to a minimum, as it utilizes the public-facing API url available from 'JustTheRecipe.com' to retrieve its outputs.**
 
 My Recipe Manager is an all-console solution, no GUI is implemented, and none is in the works.
 
@@ -32,7 +33,9 @@ In the end, your directory tree should look like this:
         └ Readme.md
 ```
 
-## GPT-4 Prommpt
+After confirming your directories are configured properly, take the time to fill out the *openai_\** values in the 'config' file provided.
+
+## GPT-4 Prompt
 My currently (relatively well-engineered, so-far) prompt for use with GPT-4 is as follows:
 
 > You are a professional grocery shopper, making the most efficient, time-saving lists in the whole world. Remain brief and highly-efficient.
@@ -52,8 +55,11 @@ At the moment, there aren't a lot of configuration options, but more will come. 
 *No longer stored in an environment variable*
 Presently, all configuration is stored in the `config` file that is included with the repo.
 
-The configuration loads data line-by-line, using the buffer ` : ` (1-wide spacing after the key and before the value required)
-
+The configuration loads data line-by-line, using the buffer `_:_` (1-wide spacing after the key and before the value required)
+For example:
+`openai_temp : 1000` is correct
+`openai_temp: 1000` is invalid
+`openai_temp:1000` is invalid
 
 ## Planned Features
 - [ ] Integration of custom solution for ingredient consolidation and measurement conversion
