@@ -32,13 +32,28 @@ In the end, your directory tree should look like this:
         └ Readme.md
 ```
 
+## GPT-4 Prommpt
+My currently (relatively well-engineered, so-far) prompt for use with GPT-4 is as follows:
+
+> You are a professional grocery shopper, making the most efficient, time-saving lists in the whole world. Remain brief and highly-efficient.
+> Only use these categories: Produce, Canned Goods, Dairy, Meat, Deli, Seafood, Condiments & Spices, Bakery, Grains
+> Substitution suggestions should always be output with their measurements.
+> Never output fine-grained details about the ingredients. (For example, do not include "zested" or "peeled, cored, and sliced", or similar)
+
+In testing, I found these values to be reasonable and provide "best-case results";
+
+- `openai_tokens : 1000`
+- `openai_temp : 0.1`
+
 ## Configuration
 At the moment, there aren't a lot of configuration options, but more will come. I am primarily developing this solution for myself, but requests and contributions are always welcome.
 
 **OpenAI API Key**
-- `os.environ['OPENAI_API']`
-- Create an environment variable that matches `OPENAI_API' with your OpenAI Key
-    - If you're interested in usage of this application for yourself and cannot / do not have an API key, create an issue here or email me at `dustin@dustinconlon.com`, and I may be able to work with you on integration without it or with my personal Key
+*No longer stored in an environment variable*
+Presently, all configuration is stored in the `config` file that is included with the repo.
+
+The configuration loads data line-by-line, using the buffer ` : ` (1-wide spacing after the key and before the value required)
+
 
 ## Planned Features
 - [ ] Integration of custom solution for ingredient consolidation and measurement conversion
