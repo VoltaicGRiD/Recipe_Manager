@@ -12,8 +12,11 @@ From the downloaded recipe, the 'RecipeManager.py' script can perform a few func
 
 ## Usage with Newsboat
 I've implemented this custom 'set browser' macro that binds to the 'r' key in newsboats configuration file found here:
+
 `~/.newsboat/config`
+
 `macro r set browser "cd ~ & python Recipes/Voltaic_Recipe_Manager/DownloadRecipe.py %u" ; open-in-browser ; set browser "xdg-open %u"`
+
 
 Make sure you create the directory 'Recipes' in your primary working / %home% directory before cloning this repo into that folder.
 `cd ~ & mkdir Recipes`
