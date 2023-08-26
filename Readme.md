@@ -10,6 +10,23 @@ From the downloaded recipe, the 'RecipeManager.py' script can perform a few func
     - TODO: Implement custom, built-in solution to do this instead, **in progress**
 - Output the recipe in a quick, easily-readable format to the console
 
+## Usage with Newsboat
+I've implemented this custom 'set browser' macro that binds to the 'r' key in newsboats configuration file found here:
+`~/.newsboat/config`
+`macro r set browser "cd ~ & python Recipes/Voltaic_Recipe_Manager/DownloadRecipe.py %u" ; open-in-browser ; set browser "xdg-open %u"`
+
+Make sure you create the directory 'Recipes' in your primary working / %home% directory before cloning this repo into that folder.
+`cd ~ & mkdir Recipes`
+
+In the end, your directory tree should look like this:
+
+%home% (~)
+ └ Recipes
+    └ Voltaic_Recipe_Manager
+        ├ RecipeManager.py
+        ├ DownloadRecipe.py
+        └ Readme.md
+
 ## Configuration
 At the moment, there aren't a lot of configuration options, but more will come. I am primarily developing this solution for myself, but requests and contributions are always welcome.
 
