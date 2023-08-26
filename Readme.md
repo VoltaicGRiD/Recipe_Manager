@@ -23,12 +23,14 @@ Make sure you create the directory 'Recipes' in your primary working / %home% di
 
 In the end, your directory tree should look like this:
 
-%home% (~)
+```bash
+(~) %HOME%
  └ Recipes
     └ Voltaic_Recipe_Manager
         ├ RecipeManager.py
         ├ DownloadRecipe.py
         └ Readme.md
+```
 
 ## Configuration
 At the moment, there aren't a lot of configuration options, but more will come. I am primarily developing this solution for myself, but requests and contributions are always welcome.
