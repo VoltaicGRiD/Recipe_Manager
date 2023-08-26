@@ -71,11 +71,11 @@ The configuration loads data line-by-line, using the buffer `_:_` (1-wide spacin
 
 For example:
 \
-`openai_temp : 1000` is correct
+:heavy_check_mark: `openai_temp : 1000`
 \
-`openai_temp: 1000` is invalid
+:x: `openai_temp: 1000` 
 \
-`openai_temp:1000` is invalid
+:x: `openai_temp:1000`
 
 
 ## Planned Features
